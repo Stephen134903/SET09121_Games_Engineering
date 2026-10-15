@@ -19,3 +19,13 @@ link_directories("${CMAKE_BINARY_DIR}/lib/SFML/lib")
 add_executable(pong main.cpp)
 target_include_directories(pong PRIVATE ${SFML_INCS})
 target_link_libraries(pong sfml-graphics)
+set_target_properties(pong 
+    PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
+)
+add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
+  -E copy_directory
+    "${PROJECT_SOURCE_DIR}/resources"
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/resources
+)
+add_dependencies(pong copy_resources)
